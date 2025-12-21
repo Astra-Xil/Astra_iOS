@@ -1,24 +1,22 @@
-//
-//  ContentView.swift
-//  astra
-//
-//  Created by Xil on 2025/12/22.
-//
-
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
-    }
-}
 
-#Preview {
-    ContentView()
+  @StateObject private var auth = AuthViewModel()
+
+  var body: some View {
+    Group {
+      if !auth.checked {
+        ProgressView()
+      } else if auth.isLoggedIn {
+        MainTabView()
+      } else {
+        LoginView()
+      }
+    }
+    .task {
+      await auth.checkLoginStatus()
+    }
+    .environmentObject(auth)
+  }
 }

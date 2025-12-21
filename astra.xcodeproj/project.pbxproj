@@ -6,6 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		3A5117692EF89109005DD723 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5117652EF89109005DD723 /* AppConfig.swift */; };
+		3A51176A2EF89109005DD723 /* SupabaseConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5117672EF89109005DD723 /* SupabaseConfig.swift */; };
+		3A51176B2EF89109005DD723 /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3A5117662EF89109005DD723 /* Debug.xcconfig */; };
+		3A5117712EF89299005DD723 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 3A5117702EF89299005DD723 /* Supabase */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		3A51171F2EF890CD005DD723 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,11 +34,27 @@
 		3A5117112EF890CB005DD723 /* astra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = astra.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A51171E2EF890CD005DD723 /* astraTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = astraTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A5117282EF890CD005DD723 /* astraUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = astraUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A5117652EF89109005DD723 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
+		3A5117662EF89109005DD723 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		3A5117672EF89109005DD723 /* SupabaseConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseConfig.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		3A51176D2EF891C5005DD723 /* Exceptions for "astra" folder in "astra" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 3A5117102EF890CB005DD723 /* astra */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		3A5117132EF890CB005DD723 /* astra */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				3A51176D2EF891C5005DD723 /* Exceptions for "astra" folder in "astra" target */,
+			);
 			path = astra;
 			sourceTree = "<group>";
 		};
@@ -52,6 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A5117712EF89299005DD723 /* Supabase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,9 +99,11 @@
 		3A5117082EF890CB005DD723 = {
 			isa = PBXGroup;
 			children = (
+				3A5117682EF89109005DD723 /* Config */,
 				3A5117132EF890CB005DD723 /* astra */,
 				3A5117212EF890CD005DD723 /* astraTests */,
 				3A51172B2EF890CD005DD723 /* astraUITests */,
+				3A51176F2EF89299005DD723 /* Frameworks */,
 				3A5117122EF890CB005DD723 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -90,6 +116,23 @@
 				3A5117282EF890CD005DD723 /* astraUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		3A5117682EF89109005DD723 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				3A5117652EF89109005DD723 /* AppConfig.swift */,
+				3A5117662EF89109005DD723 /* Debug.xcconfig */,
+				3A5117672EF89109005DD723 /* SupabaseConfig.swift */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		3A51176F2EF89299005DD723 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -112,6 +155,7 @@
 			);
 			name = astra;
 			packageProductDependencies = (
+				3A5117702EF89299005DD723 /* Supabase */,
 			);
 			productName = astra;
 			productReference = 3A5117112EF890CB005DD723 /* astra.app */;
@@ -195,6 +239,9 @@
 			);
 			mainGroup = 3A5117082EF890CB005DD723;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				3A51176E2EF8924A005DD723 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3A5117122EF890CB005DD723 /* Products */;
 			projectDirPath = "";
@@ -212,6 +259,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A51176B2EF89109005DD723 /* Debug.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -236,6 +284,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A5117692EF89109005DD723 /* AppConfig.swift in Sources */,
+				3A51176A2EF89109005DD723 /* SupabaseConfig.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,6 +450,7 @@
 				DEVELOPMENT_TEAM = YTQW99BMDM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = astra/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -432,6 +483,7 @@
 				DEVELOPMENT_TEAM = YTQW99BMDM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = astra/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -578,6 +630,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3A51176E2EF8924A005DD723 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase-community/supabase-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3A5117702EF89299005DD723 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3A51176E2EF8924A005DD723 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3A5117092EF890CB005DD723 /* Project object */;
 }

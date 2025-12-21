@@ -1,0 +1,11 @@
+//
+//  Debug.xcconfig
+//  astra
+//
+//  Created by Xil on 2025/12/22.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
+NEXT_PUBLIC_SUPABASE_URL=https:/$()/uwslzazuagjzbfnmfvft.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV3c2x6YXp1YWdqemJmbm1mdmZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM3NDQyNTIsImV4cCI6MjA3OTMyMDI1Mn0.Rr9mBZkqtQXBX41Qmc7UTjeEKA1m_zi3GuFQu1jH7pM
