@@ -1,6 +1,6 @@
 import Foundation
 
 enum AppConfig {
-  static let apiBaseURL = "http://localhost:3000"
+  static let apiBaseURL = "https://astra-ewy.pages.dev"
   // 実機/本番ではここだけ変える
 }
