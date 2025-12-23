@@ -9,11 +9,12 @@ import SwiftUI
 
 @main
 struct astraApp: App {
-
+    @StateObject private var authStore = AuthStore()
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(ScreenSizeStore())
+                .environmentObject(authStore)
         }
         
     }

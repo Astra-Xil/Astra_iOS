@@ -32,7 +32,7 @@ struct AnimeCardView: View {
 
             Text(title)
                 .font(.footnote)
-                .lineLimit(2)
+                .lineLimit(1)
 
             Text(genres.joined(separator: " / "))
                 .font(.caption2)

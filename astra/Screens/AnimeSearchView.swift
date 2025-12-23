@@ -4,6 +4,7 @@ struct AnimeSearchView: View {
 
     @StateObject private var vm = AnimeSearchViewModel()
     @State private var query = ""
+    @EnvironmentObject var authStore: AuthStore
 
     // ✅ 常に3列
     private let columns = Array(
@@ -21,11 +22,16 @@ struct AnimeSearchView: View {
 
                 LazyVGrid(columns: columns, spacing: 16) {
                     ForEach(vm.result) { item in
-                        AnimeCardView(
-                            title: item.title,
-                            genres: item.genres,
-                            imageUrl: item.imageUrl
-                        )
+                        NavigationLink {
+                                ReviewPostView(animeId: item.id,accessToken: authStore.accessToken)
+                            } label: {
+                                AnimeCardView(
+                                    title: item.title,
+                                    genres: item.genres,
+                                    imageUrl: item.imageUrl
+                                )
+                            }
+                            .buttonStyle(.plain)
                     }
                 }
                 .padding(.horizontal, 16)
