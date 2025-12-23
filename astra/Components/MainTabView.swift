@@ -8,7 +8,6 @@ struct MainTabView: View {
             } label: {
                 Label("ホーム", systemImage: "house")
             }
-
             Tab {
                 NotificationView()
             } label: {

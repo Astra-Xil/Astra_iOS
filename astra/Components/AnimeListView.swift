@@ -26,7 +26,7 @@ struct AnimeListView: View {
                         NavigationLink {
                                         AnimeDetailView(title: "タコピーの原罪")
                                     } label: {
-                                        AnimeCardView()
+                                        AnimeCardView(title: "タコピーの原罪", genres: [""], imageUrl: "")
                                     }
                                     .buttonStyle(.plain)
                     }

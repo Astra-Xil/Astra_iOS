@@ -13,6 +13,7 @@ struct astraApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(ScreenSizeStore())
         }
         
     }

@@ -1,35 +1,43 @@
-//
-//  AnimeSearchView.swift
-//  astra
-//
-//  Created by Xil on 2025/12/22.
-//
-
 import SwiftUI
 
 struct AnimeSearchView: View {
 
-  @StateObject private var vm = AnimeSearchViewModel()
-  @State private var query = ""
+    @StateObject private var vm = AnimeSearchViewModel()
+    @State private var query = ""
 
-  var body: some View {
-    VStack {
-      TextField("検索", text: $query)
-        .textFieldStyle(.roundedBorder)
-        .padding()
+    // ✅ 常に3列
+    private let columns = Array(
+        repeating: GridItem(.flexible(), spacing: 16),
+        count: 3
+    )
 
-      if vm.isLoading {
-        ProgressView()
-      }
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                if vm.isLoading {
+                    ProgressView()
+                        .padding(.top, 40)
+                }
 
-      List(vm.result) { item in
-        Text(item.title)
-      }
+                LazyVGrid(columns: columns, spacing: 16) {
+                    ForEach(vm.result) { item in
+                        AnimeCardView(
+                            title: item.title,
+                            genres: item.genres,
+                            imageUrl: item.imageUrl
+                        )
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.top, 8)
+            }
+            .navigationTitle("検索")
+        }
+        .searchable(text: $query)
+        .onSubmit(of: .search) {
+            Task {
+                await vm.loadAnime(q: query)
+            }
+        }
     }
-    .onSubmit(of: .text) {
-      Task {
-        await vm.loadAnime(q: query)
-      }
-    }
-  }
 }
