@@ -27,7 +27,7 @@ struct AnimeCardView: View {
                 Color.gray.opacity(0.3)
             }
             .frame(width: cardWidth, height: cardHeight)
-            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
             .clipped()
 
             Text(title)
