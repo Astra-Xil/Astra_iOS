@@ -5,11 +5,12 @@ final class AnimeDetailViewModel: ObservableObject {
     @Published var anime: AnimeDetailUI?
     @Published var isLoading = false
     @Published var errorMessage: String?
-
+    
     private let api = AnimeDetailAPI()
 
     func load(id: Int) async {
         isLoading = true
+        defer { isLoading = false }
         errorMessage = nil
 
         do {

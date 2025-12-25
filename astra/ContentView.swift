@@ -10,7 +10,8 @@ struct ContentView: View {
                 if !auth.checked {
                     ProgressView()
                 } else if auth.isLoggedIn {
-                    MainTabView()
+//                    MainTabView()
+                    Sample(animeId: 21)
                 } else {
                     LoginView()
                 }

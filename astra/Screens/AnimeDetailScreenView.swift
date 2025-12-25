@@ -7,7 +7,7 @@ struct AnimeDetailScreenView: View {
     var body: some View {
         
         AnimeDetailView(
-            title: title
+            animeId: 21
         )
         .navigationTitle("詳細")
 

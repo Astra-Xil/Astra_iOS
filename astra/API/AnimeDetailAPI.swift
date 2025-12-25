@@ -8,7 +8,7 @@ enum APIError: Error {
 
 final class AnimeDetailAPI {
     func fetchAnimeDetail(id: Int) async throws -> AnimeDetailUI {
-        guard let url = URL(string: "\(API.baseURL)/api/anime/\(id)") else {
+        guard let url = URL(string: "\(AppConfig.apiBaseURL)/api/detail_jikan/\(id)") else {
             throw APIError.badURL
         }
 
@@ -20,7 +20,7 @@ final class AnimeDetailAPI {
         if let http = res as? HTTPURLResponse, !(200...299).contains(http.statusCode) {
             throw APIError.badStatus(http.statusCode)
         }
-
+        
         do {
             return try JSONDecoder().decode(AnimeDetailResponse.self, from: data).data
         } catch {

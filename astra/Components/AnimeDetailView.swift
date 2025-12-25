@@ -1,29 +1,39 @@
 import SwiftUI
 
 struct AnimeDetailView: View {
-    let title: String
+    let animeId: Int
+    @StateObject private var vm = AnimeDetailViewModel()
 
     var body: some View {
-        ScrollView {
-            
-            VStack(alignment: .leading, spacing: 16) {
+        VStack(spacing: 12) {
 
-                Image("Takopi")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(height: 300)
-                    .clipped()
-
-                Text(title)
-                    .font(.title)
-                    .fontWeight(.bold)
-
-                Text("ここに作品の詳細を書く")
-                    .font(.body)
+            if vm.isLoading {
+                ProgressView()
             }
-            .padding()
+
+            if let anime = vm.anime {
+                Text(anime.title)
+                    .font(.title)
+
+                Text(anime.hero.scoreText)
+                    .font(.caption)
+
+                Text(anime.synopsis)
+                    .font(.footnote)
+                    .lineLimit(5)
+            }
+
+            if let errorMessage = vm.errorMessage {
+                            Text(errorMessage)
+                                .foregroundStyle(.red)
+                        }
         }
-        .navigationTitle("詳細")
-        .navigationBarTitleDisplayMode(.inline)
+        .padding()
+        .task(id: animeId) {
+            await vm.load(id: animeId)
+        }
     }
+}
+#Preview {
+    AnimeDetailView(animeId: 14333)
 }

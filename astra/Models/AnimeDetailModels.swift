@@ -11,13 +11,13 @@ struct AnimeDetailResponse: Decodable {
     let data: AnimeDetailUI
 }
 
-struct AnimeDetailUI: Decodable, Identifiable {
+
+struct AnimeDetailUI: Decodable {
     let id: Int
     let title: String
-    let titleSub: String?
-
+    let titleSub: String
     let imageUrl: String
-
+    let imagePreviewUrl: String
     let hero: Hero
     let meta: Meta
     let synopsis: String
@@ -37,7 +37,7 @@ struct AnimeDetailUI: Decodable, Identifiable {
     }
 
     struct Trailer: Decodable {
+        let url: String
         let youtubeId: String
-        let thumbnailUrl: String
     }
 }
