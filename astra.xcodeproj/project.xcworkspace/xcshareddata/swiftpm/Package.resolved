@@ -1,6 +1,15 @@
 {
-  "originHash" : "497b223336ae156cc4edd8c12c3d176b975452a34540e6bdf0a3cf91a248bc9c",
+  "originHash" : "72d519720fa823c69cda8607ac64b049783d4109aa093971f7f8e387cee328ba",
   "pins" : [
+    {
+      "identity" : "simpletoast",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sanzaru/SimpleToast.git",
+      "state" : {
+        "revision" : "4ce5fa4a3412642e15aa09d4b5f3a58a5516cd44",
+        "version" : "0.12.0"
+      }
+    },
     {
       "identity" : "supabase-swift",
       "kind" : "remoteSourceControl",

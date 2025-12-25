@@ -17,7 +17,7 @@ struct AnimeCardView: View {
         let cardWidth = max((totalWidth - spacing * 2) / 3, 0)
         let cardHeight = cardWidth * (195.0 / 130.0)
 
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 2) {
 
             AsyncImage(url: URL(string: imageUrl)) { image in
                 image
@@ -31,7 +31,7 @@ struct AnimeCardView: View {
             .clipped()
 
             Text(title)
-                .font(.footnote)
+                .font(.caption2)
                 .lineLimit(1)
 
             Text(genres.joined(separator: " / "))

@@ -23,7 +23,7 @@ struct AnimeSearchView: View {
                 LazyVGrid(columns: columns, spacing: 16) {
                     ForEach(vm.result) { item in
                         NavigationLink {
-                                ReviewPostView(animeId: item.id,accessToken: authStore.accessToken)
+                            AnimeDetailScreenView(title: "")
                             } label: {
                                 AnimeCardView(
                                     title: item.title,

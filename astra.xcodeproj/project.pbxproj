@@ -11,6 +11,7 @@
 		3A51176A2EF89109005DD723 /* SupabaseConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5117672EF89109005DD723 /* SupabaseConfig.swift */; };
 		3A51176B2EF89109005DD723 /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3A5117662EF89109005DD723 /* Debug.xcconfig */; };
 		3A5117712EF89299005DD723 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 3A5117702EF89299005DD723 /* Supabase */; };
+		3A64819E2EFD16F5007ED201 /* SimpleToast in Frameworks */ = {isa = PBXBuildFile; productRef = 3A64819D2EFD16F5007ED201 /* SimpleToast */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A64819E2EFD16F5007ED201 /* SimpleToast in Frameworks */,
 				3A5117712EF89299005DD723 /* Supabase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -107,6 +109,7 @@
 				3A5117122EF890CB005DD723 /* Products */,
 			);
 			sourceTree = "<group>";
+			tabWidth = 4;
 		};
 		3A5117122EF890CB005DD723 /* Products */ = {
 			isa = PBXGroup;
@@ -156,6 +159,7 @@
 			name = astra;
 			packageProductDependencies = (
 				3A5117702EF89299005DD723 /* Supabase */,
+				3A64819D2EFD16F5007ED201 /* SimpleToast */,
 			);
 			productName = astra;
 			productReference = 3A5117112EF890CB005DD723 /* astra.app */;
@@ -241,6 +245,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				3A51176E2EF8924A005DD723 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+				3A64819C2EFD16E1007ED201 /* XCRemoteSwiftPackageReference "SimpleToast" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3A5117122EF890CB005DD723 /* Products */;
@@ -454,8 +459,10 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -464,6 +471,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.sophiesun.astra;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -487,8 +497,10 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -497,6 +509,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.sophiesun.astra;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -640,6 +655,14 @@
 				minimumVersion = 2.5.1;
 			};
 		};
+		3A64819C2EFD16E1007ED201 /* XCRemoteSwiftPackageReference "SimpleToast" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sanzaru/SimpleToast.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.12.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -647,6 +670,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3A51176E2EF8924A005DD723 /* XCRemoteSwiftPackageReference "supabase-swift" */;
 			productName = Supabase;
+		};
+		3A64819D2EFD16F5007ED201 /* SimpleToast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3A64819C2EFD16E1007ED201 /* XCRemoteSwiftPackageReference "SimpleToast" */;
+			productName = SimpleToast;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
