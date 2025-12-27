@@ -18,7 +18,7 @@ final class ReviewPostViewModel: ObservableObject {
         defer { isSubmitting = false }
 
         do {
-            try await ReviewService.shared.postReview(
+            try await ReviewServiceAPI.shared.postReview(
                 animeId: animeId,
                 score: score,
                 comment: comment,
