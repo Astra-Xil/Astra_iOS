@@ -5,35 +5,34 @@ struct AnimeDetailView: View {
     @StateObject private var vm = AnimeDetailViewModel()
 
     var body: some View {
-        VStack(spacing: 12) {
-
-            if vm.isLoading {
-                ProgressView()
+        ScrollView {
+            VStack(spacing: 12) {
+                content
             }
-
-            if let anime = vm.anime {
-                Text(anime.title)
-                    .font(.title)
-
-                Text(anime.hero.scoreText)
-                    .font(.caption)
-
-                Text(anime.synopsis)
-                    .font(.footnote)
-                    .lineLimit(5)
-            }
-
-            if let errorMessage = vm.errorMessage {
-                            Text(errorMessage)
-                                .foregroundStyle(.red)
-                        }
+            .padding()
         }
-        .padding()
         .task(id: animeId) {
             await vm.load(id: animeId)
         }
     }
+
+    @ViewBuilder
+    private var content: some View {
+        switch vm.state {
+
+        case .idle, .loading:
+            ProgressView()
+
+        case .loaded(let anime):
+            AnimeHeader(anime: anime)
+
+        case .error(let message):
+            Text(message)
+                .foregroundStyle(.red)
+        }
+    }
 }
+
 #Preview {
-    AnimeDetailView(animeId: 14333)
+    AnimeDetailView(animeId: 21)
 }

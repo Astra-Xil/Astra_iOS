@@ -5,10 +5,11 @@ struct AnimeDetailScreenView: View {
     let title: String
     @State private var showChat = false
     var body: some View {
-        
-        AnimeDetailView(
-            animeId: 21
-        )
+        NavigationStack {
+            AnimeDetailView(
+                animeId: 21
+            )
+        }
         .navigationTitle("詳細")
 
         .toolbar {

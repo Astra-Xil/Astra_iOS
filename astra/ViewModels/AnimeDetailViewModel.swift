@@ -1,26 +1,27 @@
 import SwiftUI
 import Combine
+enum AnimeDetailState {
+    case idle
+    case loading
+    case loaded(AnimeDetailUI)
+    case error(String)
+}
 @MainActor
 final class AnimeDetailViewModel: ObservableObject {
-    @Published var anime: AnimeDetailUI?
-    @Published var isLoading = false
-    @Published var errorMessage: String?
-    
+
+    @Published var state: AnimeDetailState = .idle
     private let api = AnimeDetailAPI()
 
     func load(id: Int) async {
-        isLoading = true
-        defer { isLoading = false }
-        errorMessage = nil
+        state = .loading
 
         do {
-            anime = try await api.fetchAnimeDetail(id: id)
+            let anime = try await api.fetchAnimeDetail(id: id)
+            state = .loaded(anime)
         } catch APIError.badStatus(let code) {
-            errorMessage = "取得失敗（HTTP \(code)）"
+            state = .error("取得失敗（HTTP \(code)）")
         } catch {
-            errorMessage = "取得に失敗しました"
+            state = .error("取得に失敗しました")
         }
-
-        isLoading = false
     }
 }
