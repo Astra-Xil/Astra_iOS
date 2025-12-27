@@ -1,8 +1,8 @@
 import Foundation
 
-final class ReviewService {
+final class ReviewServiceAPI {
 
-    static let shared = ReviewService()
+    static let shared = ReviewServiceAPI()
     private init() {}
 
     func postReview(
@@ -12,7 +12,7 @@ final class ReviewService {
         accessToken: String
     ) async throws {
         print("accessToken:", accessToken)
-        let url = URL(string: "https://astra-ewy.pages.dev/api/reviews")!
+        let url = URL(string: "\(AppConfig.apiBaseURL)/api/reviews")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
 
@@ -42,5 +42,33 @@ final class ReviewService {
             throw URLError(.badServerResponse)
         }
         
+    }
+}
+extension ReviewServiceAPI {
+
+    func fetchReviews(animeId: Int) async throws -> [Review] {
+        var components = URLComponents(
+            string: "\(AppConfig.apiBaseURL)/api/reviews"
+        )!
+        components.queryItems = [
+            URLQueryItem(name: "anime_id", value: String(animeId))
+        ]
+
+        let url = components.url!
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        guard let res = response as? HTTPURLResponse,
+              200..<300 ~= res.statusCode else {
+            throw URLError(.badServerResponse)
+        }
+
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+
+        let decoded = try decoder.decode(ReviewResponse.self, from: data)
+        return decoded.data
     }
 }
