@@ -4,7 +4,7 @@ struct AnimeSearchView: View {
 
     @StateObject private var vm = AnimeSearchViewModel()
     @State private var query = ""
-    @EnvironmentObject var authStore: AuthStore
+    
 
     // ✅ 常に3列
     private let columns = Array(

@@ -3,7 +3,7 @@ import SwiftUI
 struct ReviewPostView: View {
 
     let animeId: Int
-    let accessToken: String
+    @EnvironmentObject var authStore: AuthStore
 
     @StateObject private var vm = ReviewPostViewModel()
     @Environment(\.dismiss) private var dismiss
@@ -71,20 +71,44 @@ struct ReviewPostView: View {
                         .frame(width: 48, height: 48)
                 }
                 .glassEffect(.regular)
+                .disabled(
+                    vm.isSubmitting ||
+                    vm.comment.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
+                    authStore.accessToken.isEmpty
+                )
             }
-
+            
             Spacer()
-
+            
             if #available(iOS 26.0, *) {
                 Button {
-                    // 投稿処理
+                    Task {
+                        await authStore.refreshSession()
+                        let success = await vm.submit(
+                            animeId: animeId,
+                            accessToken: authStore.accessToken
+                        )
+                        
+                        if success {
+                            dismiss()
+                        }
+                    }
                 } label: {
-                    Image(systemName: "arrow.up")
-                        .font(.title2)
-                        .foregroundStyle(.white)
-                        .frame(width: 48, height: 48)
+                    if vm.isSubmitting {
+                        ProgressView()
+                            .frame(width: 48, height: 48)
+                    } else {
+                        Image(systemName: "arrow.up")
+                            .font(.title2)
+                            .foregroundStyle(.white)
+                            .frame(width: 48, height: 48)
+                    }
                 }
                 .glassEffect(.regular.tint(Color("PrimaryColor")))
+                .disabled(
+                    vm.isSubmitting ||
+                    vm.comment.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                )
             }
         }
         .padding(.horizontal, 12)
@@ -96,7 +120,7 @@ struct ReviewPostView: View {
     NavigationStack {
         ReviewPostView(
             animeId: 1,
-            accessToken: "preview-token"
+           
         )
     }
 }

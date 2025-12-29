@@ -6,10 +6,15 @@ struct ReviewPostRequest: Codable {
     let score: Double
     let comment: String
 }
+struct APIErrorResponse: Decodable {
+    let error: String
+}
+
 
 struct ReviewResponse: Decodable {
     let data: [Review]
 }
+
 
 struct Review: Decodable, Identifiable {
     let id: Int

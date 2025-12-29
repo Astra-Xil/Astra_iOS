@@ -24,8 +24,7 @@ struct AnimeDetailScreenView: View {
         .sheet(isPresented: $showChat) {
             NavigationStack {
                     ReviewPostView(
-                        animeId: 3,
-                        accessToken: ""
+                        animeId: 3
                     )
                 }
             .presentationDetents([.large])

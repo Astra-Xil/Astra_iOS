@@ -11,44 +11,48 @@ final class ReviewServiceAPI {
         comment: String,
         accessToken: String
     ) async throws {
-        print("accessToken:", accessToken)
-        let url = URL(string: "\(AppConfig.apiBaseURL)/api/reviews")!
+
+        let url = URL(string: "https://untactile-holeless-wilda.ngrok-free.dev/reviews")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(
-            "Bearer \(accessToken)",
-            forHTTPHeaderField: "Authorization"
-        )
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
 
         let body = ReviewPostRequest(
             anime_id: animeId,
             score: score,
             comment: comment
         )
-
         request.httpBody = try JSONEncoder().encode(body)
 
         let (data, response) = try await URLSession.shared.data(for: request)
 
-        if let res = response as? HTTPURLResponse {
-            print("statusCode:", res.statusCode)
-            print("body:", String(data: data, encoding: .utf8) ?? "nil")
-        }
-        
-        guard let res = response as? HTTPURLResponse,
-              200..<300 ~= res.statusCode else {
+        guard let res = response as? HTTPURLResponse else {
             throw URLError(.badServerResponse)
         }
-        
+
+        // ✅ 成功
+        if 200..<300 ~= res.statusCode {
+            return
+        }
+
+        // ✅ 失敗：API の error を読む
+        if let apiError = try? JSONDecoder().decode(APIErrorResponse.self, from: data) {
+            throw NSError(
+                domain: "ReviewPost",
+                code: res.statusCode,
+                userInfo: [NSLocalizedDescriptionKey: apiError.error]
+            )
+        }
+
+        throw URLError(.badServerResponse)
     }
 }
 extension ReviewServiceAPI {
 
     func fetchReviews(animeId: Int) async throws -> [Review] {
         var components = URLComponents(
-            string: "\(AppConfig.apiBaseURL)/api/reviews"
+            string: "https://backendastra.yuki-2002-828.workers.dev/reviews"
         )!
         components.queryItems = [
             URLQueryItem(name: "anime_id", value: String(animeId))

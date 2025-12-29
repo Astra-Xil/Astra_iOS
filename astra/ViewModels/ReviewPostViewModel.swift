@@ -15,6 +15,7 @@ final class ReviewPostViewModel: ObservableObject {
     ) async -> Bool {
 
         isSubmitting = true
+        errorMessage = nil
         defer { isSubmitting = false }
 
         do {
@@ -25,9 +26,17 @@ final class ReviewPostViewModel: ObservableObject {
                 accessToken: accessToken
             )
             return true
+
+        } catch let error as NSError {
+            // ✅ API が返した error をそのまま表示
+            errorMessage = error.localizedDescription
+            return false
+
         } catch {
-            errorMessage = "投稿に失敗しました"
+            // 念のための保険
+            errorMessage = "通信エラーが発生しました"
             return false
         }
     }
+
 }

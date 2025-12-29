@@ -3,7 +3,6 @@ import SwiftUI
 struct AnimeDetailView: View {
     let animeId: Int
     @StateObject private var vm = AnimeDetailViewModel()
-
     var body: some View {
         ScrollView {
             VStack(spacing: 12) {
