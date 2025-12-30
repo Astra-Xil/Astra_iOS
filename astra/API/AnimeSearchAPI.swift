@@ -6,7 +6,7 @@ enum AnimeAPI {
     let encoded = q.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
 
     let url = URL(
-      string: "\(AppConfig.apiBaseURL)/api/jikan?q=\(encoded)"
+      string: "\(AppConfig.apiBaseURL)/api/anime/search?q=\(encoded)"
     )!
 
     let (data, _) = try await URLSession.shared.data(from: url)

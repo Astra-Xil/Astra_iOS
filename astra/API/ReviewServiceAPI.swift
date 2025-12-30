@@ -12,7 +12,7 @@ final class ReviewServiceAPI {
         accessToken: String
     ) async throws {
 
-        let url = URL(string: "https://untactile-holeless-wilda.ngrok-free.dev/reviews")!
+        let url = URL(string: "\(AppConfig.apiBaseURL)/reviews")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -52,7 +52,7 @@ extension ReviewServiceAPI {
 
     func fetchReviews(animeId: Int) async throws -> [Review] {
         var components = URLComponents(
-            string: "https://backendastra.yuki-2002-828.workers.dev/reviews"
+            string: "\(AppConfig.apiBaseURL)/reviews"
         )!
         components.queryItems = [
             URLQueryItem(name: "anime_id", value: String(animeId))
