@@ -82,6 +82,7 @@ struct ReviewPostView: View {
             
             if #available(iOS 26.0, *) {
                 Button {
+                    print(animeId)
                     Task {
                         await authStore.refreshSession()
                         let success = await vm.submit(

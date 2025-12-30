@@ -26,7 +26,7 @@ struct AnimeListView: View {
                     ForEach(0..<7) { _ in
                         NavigationLink {
                             AnimeDetailScreenView(
-                                                            title: "タコピーの原罪"
+                                animeId: 12, title: "タコピーの原罪"
                                                         )
                         } label: {
                             AnimeCardView(title: "タコピーの原罪", genres: [""], imageUrl: "")

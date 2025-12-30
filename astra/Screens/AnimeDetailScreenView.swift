@@ -1,13 +1,13 @@
 import SwiftUI
 import SimpleToast
 struct AnimeDetailScreenView: View {
-
+    let animeId: Int
     let title: String
     @State private var showChat = false
     var body: some View {
         NavigationStack {
             AnimeDetailView(
-                animeId: 21
+                animeId: animeId
             )
         }
         .navigationTitle("詳細")
@@ -24,7 +24,7 @@ struct AnimeDetailScreenView: View {
         .sheet(isPresented: $showChat) {
             NavigationStack {
                     ReviewPostView(
-                        animeId: 3
+                        animeId: animeId
                     )
                 }
             .presentationDetents([.large])
@@ -34,5 +34,5 @@ struct AnimeDetailScreenView: View {
     }
 }
 #Preview {
-    AnimeDetailScreenView(title: "")
+    AnimeDetailScreenView(animeId: 11, title: "")
 }

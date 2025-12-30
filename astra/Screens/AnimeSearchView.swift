@@ -23,7 +23,7 @@ struct AnimeSearchView: View {
                 LazyVGrid(columns: columns, spacing: 16) {
                     ForEach(vm.result) { item in
                         NavigationLink {
-                            AnimeDetailScreenView(title: "")
+                            AnimeDetailScreenView(animeId: item.id, title: "")
                             } label: {
                                 AnimeCardView(
                                     title: item.title,
