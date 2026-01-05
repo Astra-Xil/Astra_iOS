@@ -26,7 +26,7 @@ final class ChatServiceAPI {
 
         let body = ChatPostRequest(
             anime_id: animeId,
-            message: message
+            content: message
         )
         request.httpBody = try JSONEncoder().encode(body)
 
