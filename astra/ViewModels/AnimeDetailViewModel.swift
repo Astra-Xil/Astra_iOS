@@ -16,7 +16,7 @@ final class AnimeDetailViewModel: ObservableObject {
         state = .loading
 
         do {
-            let anime = try await api.fetchAnimeDetail(id: id)
+            let anime = try await api.fetchAnimeDetail(malId: id)
             state = .loaded(anime)
         } catch APIError.badStatus(let code) {
             state = .error("取得失敗（HTTP \(code)）")
@@ -25,3 +25,4 @@ final class AnimeDetailViewModel: ObservableObject {
         }
     }
 }
+

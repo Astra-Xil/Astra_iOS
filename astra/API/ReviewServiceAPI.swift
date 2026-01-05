@@ -64,6 +64,14 @@ extension ReviewServiceAPI {
 
         let (data, response) = try await URLSession.shared.data(for: request)
 
+        if let http = response as? HTTPURLResponse {
+            print("STATUS:", http.statusCode)
+        }
+
+        let raw = String(data: data, encoding: .utf8) ?? "nil"
+        print("RAW JSON:", raw)
+
+
         guard let res = response as? HTTPURLResponse,
               200..<300 ~= res.statusCode else {
             throw URLError(.badServerResponse)
@@ -71,7 +79,6 @@ extension ReviewServiceAPI {
 
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
-
         let decoded = try decoder.decode(ReviewResponse.self, from: data)
         return decoded.data
     }

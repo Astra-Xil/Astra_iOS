@@ -1,6 +1,5 @@
 import Foundation
 
 enum AppConfig {
-  static let apiBaseURL = "https://untactile-holeless-wilda.ngrok-free.dev"
-  // 実機/本番ではここだけ変える
+  static let apiBaseURL = "https://backendastra.yuki-2002-828.workers.dev"
 }

@@ -3,9 +3,9 @@ import SwiftUI
 struct StarRatingView: View {
     @Binding var rating: Double
     let maxRating: Int = 5
-
-    private let starSize: CGFloat = 20
-    private let spacing: CGFloat = 4
+    let isEditable: Bool   // ← 追加
+    let starSize: CGFloat      // ← 外から指定
+    let spacing: CGFloat       // ← 外から指定
 
     var body: some View {
         HStack(spacing: spacing) {
@@ -20,10 +20,12 @@ struct StarRatingView: View {
             }
         }
         .gesture(
-            DragGesture(minimumDistance: 0)
+            isEditable
+            ? DragGesture(minimumDistance: 0)
                 .onChanged { value in
                     updateRating(from: value.location.x)
                 }
+            : nil
         )
         .animation(.easeInOut(duration: 0.15), value: rating)
     }

@@ -24,7 +24,7 @@ struct ReviewPostView: View {
 
                     Spacer()
 
-                    StarRatingView(rating: $vm.score)
+                    StarRatingView(rating: $vm.score, isEditable: true, starSize: 20, spacing: 4)
                 }
                 .padding(.leading, 12)
 

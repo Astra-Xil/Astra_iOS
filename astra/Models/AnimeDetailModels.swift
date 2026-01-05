@@ -1,43 +1,56 @@
-//
-//  AnimeDetailModels.swift
-//  astra
-//
-//  Created by Xil on 2025/12/26.
-//
-
 import Foundation
 
 struct AnimeDetailResponse: Decodable {
     let data: AnimeDetailUI
 }
 
-
-struct AnimeDetailUI: Decodable {
+struct AnimeDetailUI: Decodable, Identifiable {
     let id: Int
     let title: String
-    let titleSub: String
-    let imageUrl: String
-    let imagePreviewUrl: String
+
     let hero: Hero
     let meta: Meta
-    let synopsis: String
-    let trailer: Trailer
+    let images: Images
 
+    let synopsis: String?
+    let trailer: Trailer?
+    let siteUrl: String?
+    let externalLinks: [ExternalLink]?
+
+    // MARK: - Hero
     struct Hero: Decodable {
-        let scoreText: String
-        let episodesText: String
-        let statusLabel: String
+        let episodesText: String?
+        let statusText: String?
     }
 
+    // MARK: - Meta
     struct Meta: Decodable {
-        let genres: [String]
-        let studios: [String]
-        let yearText: String
-        let durationText: String
+        let seasonYear: Int?
+        let season: String?
+        let genres: [String]?
+        let studios: [String]?
+        let durationText: String?
     }
 
+    // MARK: - Images
+    struct Images: Decodable {
+        let coverLarge: String?
+        let coverColor: String?
+        let banner: String?
+    }
+
+    // MARK: - Trailer
     struct Trailer: Decodable {
-        let url: String
         let youtubeId: String
+        let url: String
+    }
+
+    // MARK: - ExternalLink
+    struct ExternalLink: Decodable, Identifiable {
+        var id: String { site + url }
+
+        let site: String
+        let url: String
+        let icon: String?
     }
 }

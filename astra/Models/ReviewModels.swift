@@ -15,12 +15,20 @@ struct ReviewResponse: Decodable {
     let data: [Review]
 }
 
-
 struct Review: Decodable, Identifiable {
-    let id: Int
-    let anime_id: Int
-    let score: Double
-    let comment: String
-    let user_id: String
-    let created_at: Date
+    let id: UUID
+    let score: Int?
+    let comment: String?
+    let createdAt: Date
+    let userId: UUID?
+    let profiles: Profile?
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case score
+        case comment
+        case createdAt = "created_at"
+        case userId = "user_id"
+        case profiles
+    }
 }

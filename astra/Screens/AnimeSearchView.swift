@@ -1,49 +1,118 @@
 import SwiftUI
 
+import SwiftUI
+
+import SwiftUI
+
 struct AnimeSearchView: View {
 
-    @StateObject private var vm = AnimeSearchViewModel()
+    @StateObject private var vm =
+            AniListSearchViewModel(api: AniListSearchAPI())
     @State private var query = ""
-    
-
-    // ✅ 常に3列
-    private let columns = Array(
-        repeating: GridItem(.flexible(), spacing: 16),
-        count: 3
-    )
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                if vm.isLoading {
-                    ProgressView()
-                        .padding(.top, 40)
-                }
-
-                LazyVGrid(columns: columns, spacing: 16) {
-                    ForEach(vm.result) { item in
-                        NavigationLink {
-                            AnimeDetailScreenView(animeId: item.id, title: "")
-                            } label: {
-                                AnimeCardView(
-                                    title: item.title,
-                                    genres: item.genres,
-                                    imageUrl: item.imageUrl
-                                )
-                            }
-                            .buttonStyle(.plain)
-                    }
-                }
-                .padding(.horizontal, 16)
-                .padding(.top, 8)
-            }
-            .navigationTitle("検索")
+            content
+                
         }
+        .navigationTitle("検索")
         .searchable(text: $query)
         .onSubmit(of: .search) {
             Task {
-                await vm.loadAnime(q: query)
+                await vm.search(text: query)
+            }
+        }
+    }
+
+    // MARK: - State Rendering
+    @ViewBuilder
+    private var content: some View {
+        switch vm.state {
+
+        case .idle:
+            VStack {
+                Spacer()
+                Text("作品名で検索してください")
+                    .foregroundStyle(.secondary)
+                Spacer()
+            }
+
+        case .loading:
+            VStack {
+                Spacer()
+                ProgressView()
+                Spacer()
+            }
+
+        case .loaded(let items):
+            if items.isEmpty {
+                VStack {
+                    Spacer()
+                    Text("該当する作品がありません")
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                }
+            } else {
+                List(items) { item in
+                    NavigationLink {
+                        AnimeDetailScreenView(
+                            animeId: item.id,
+                            title: item.title
+                        )
+                    } label: {
+                        AnimeRowView(item: item)
+                    }
+                    .listRowSeparator(.visible)
+                    .alignmentGuide(.listRowSeparatorLeading) { _ in 0 }
+                    
+                }
+                .listStyle(.plain)
+            }
+
+        case .error(let message):
+            VStack {
+                Spacer()
+                Text(message)
+                    .foregroundColor(.red)
+                Spacer()
             }
         }
     }
 }
+
+struct AnimeRowView: View {
+
+    let item: AniListSearchItem   // ← vm.search の型に合わせて
+
+    var body: some View {
+        HStack(spacing: 12) {
+
+            // 画像（あるなら）
+            AsyncImage(url: URL(string: item.imageUrl)) { image in
+                image
+                    .resizable()
+                    .scaledToFill()
+            } placeholder: {
+                Color.gray.opacity(0.3)
+            }
+            .frame(width: 80, height: 113)
+            .clipShape(RoundedRectangle(cornerRadius: 4))
+            .clipped()
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(item.title)
+                    .font(.subheadline)
+                    .lineLimit(2)
+
+                Text(item.genres.joined(separator: " / "))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(2)
+            }
+
+            
+        }
+        .padding(.vertical, 2)
+    }
+}
+
