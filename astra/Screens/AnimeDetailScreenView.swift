@@ -1,8 +1,10 @@
 import SwiftUI
 import SimpleToast
+import Supabase
 struct AnimeDetailScreenView: View {
     let animeId: Int
     let title: String
+    @Environment(\.supabase) private var supabase
     @State private var showChat = false
     var body: some View {
         
@@ -22,7 +24,7 @@ struct AnimeDetailScreenView: View {
                         Spacer()
                         if #available(iOS 26.0, *) {
                             NavigationLink {
-                                ChatView(animeId: animeId)
+                                ChatView(animeId: animeId, userName: "yuki", supabase: supabase)
                             } label: {
                                 Image(systemName: "bubble.left")
                                     .font(.system(size: 20, weight: .bold))
@@ -56,6 +58,4 @@ struct AnimeDetailScreenView: View {
         
     }
 }
-#Preview {
-    AnimeDetailScreenView(animeId: 11, title: "")
-}
+

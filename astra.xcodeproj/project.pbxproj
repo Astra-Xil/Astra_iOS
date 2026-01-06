@@ -12,6 +12,7 @@
 		3A51176B2EF89109005DD723 /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3A5117662EF89109005DD723 /* Debug.xcconfig */; };
 		3A5117712EF89299005DD723 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 3A5117702EF89299005DD723 /* Supabase */; };
 		3A64819E2EFD16F5007ED201 /* SimpleToast in Frameworks */ = {isa = PBXBuildFile; productRef = 3A64819D2EFD16F5007ED201 /* SimpleToast */; };
+		3A9A596A2F0CC323000BB3B5 /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = 3A9A59692F0CC323000BB3B5 /* Realtime */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A9A596A2F0CC323000BB3B5 /* Realtime in Frameworks */,
 				3A64819E2EFD16F5007ED201 /* SimpleToast in Frameworks */,
 				3A5117712EF89299005DD723 /* Supabase in Frameworks */,
 			);
@@ -160,6 +162,7 @@
 			packageProductDependencies = (
 				3A5117702EF89299005DD723 /* Supabase */,
 				3A64819D2EFD16F5007ED201 /* SimpleToast */,
+				3A9A59692F0CC323000BB3B5 /* Realtime */,
 			);
 			productName = astra;
 			productReference = 3A5117112EF890CB005DD723 /* astra.app */;
@@ -675,6 +678,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3A64819C2EFD16E1007ED201 /* XCRemoteSwiftPackageReference "SimpleToast" */;
 			productName = SimpleToast;
+		};
+		3A9A59692F0CC323000BB3B5 /* Realtime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3A51176E2EF8924A005DD723 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Realtime;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

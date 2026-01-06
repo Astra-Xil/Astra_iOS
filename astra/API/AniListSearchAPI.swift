@@ -1,8 +1,6 @@
 import Foundation
 
 // MARK: - API
-import Foundation
-import Foundation
 
 protocol AniListSearchAPIProtocol {
     func search(query: String) async throws -> [AniListSearchItem]
