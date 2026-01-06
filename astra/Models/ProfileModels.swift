@@ -15,3 +15,7 @@ struct Profile: Decodable {
         case avatarUrl = "avatar_url"
     }
 }
+struct BroadcastProfile: Codable{
+    let name: String
+    let avatarUrl: String?
+}

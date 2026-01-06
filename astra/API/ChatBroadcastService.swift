@@ -14,7 +14,7 @@ final class ChatBroadcastService {
     // MARK: - 接続
     func connect(
         animeId: Int,
-        onMessage: @escaping @MainActor (ChatMessage) -> Void
+        onMessage: @escaping @MainActor (BroadcastMessage) -> Void
     ) async throws {
 
         let channel = supabase.realtimeV2.channel("chat:\(animeId)") {
@@ -39,12 +39,42 @@ final class ChatBroadcastService {
                         continue
                     }
 
-                    // ✅ AnyJSON → Data（公式に保証されている）
                     let data = try JSONEncoder().encode(payload)
 
-                    // ✅ Data → ChatMessage
-                    let msg = try JSONDecoder().decode(ChatMessage.self, from: data)
+                    let decoder = JSONDecoder()
 
+                    let formatterWithTZ = ISO8601DateFormatter()
+                    formatterWithTZ.formatOptions = [
+                        .withInternetDateTime,
+                        .withFractionalSeconds
+                    ]
+
+                    let formatterNoTZ = DateFormatter()
+                    formatterNoTZ.locale = Locale(identifier: "en_US_POSIX")
+                    formatterNoTZ.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
+
+                    decoder.dateDecodingStrategy = .custom { decoder in
+                        let container = try decoder.singleValueContainer()
+                        let value = try container.decode(String.self)
+
+                        // ① タイムゾーン付き（理想）
+                        if let date = formatterWithTZ.date(from: value) {
+                            return date
+                        }
+
+                        // ② タイムゾーン無し（今回）
+                        if let date = formatterNoTZ.date(from: value) {
+                            return date
+                        }
+
+                        throw DecodingError.dataCorruptedError(
+                            in: container,
+                            debugDescription: "Invalid date format: \(value)"
+                        )
+                    }
+
+
+                    let msg = try decoder.decode(BroadcastMessage.self, from: data)
                     await onMessage(msg)
 
                 } catch {
@@ -54,11 +84,12 @@ final class ChatBroadcastService {
         }
 
 
+
     }
 
 
     // MARK: - 送信
-    func send(message: ChatMessage) async throws {
+    func send(message: BroadcastMessage) async throws {
         guard let channel else { return }
         try await channel.broadcast(
             event: "message",

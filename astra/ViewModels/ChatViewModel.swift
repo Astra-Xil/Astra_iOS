@@ -11,64 +11,82 @@ import Foundation
 final class ChatViewModel: ObservableObject {
 
     @Published var messages: [ChatMessage] = []
-        @Published var text: String = ""
+    @Published var text: String = ""
 
-        private let service: ChatBroadcastService
-        private let animeId: Int
-        private let userName: String
+    private let service: ChatBroadcastService
+    private let animeId: Int
 
-        // 👇 View から読む用（読み取り専用）
-        var currentUserName: String {
-            userName
-        }
+    let currentUserId: UUID   // ← ここが基準
 
-        init(
+    init(
             animeId: Int,
-            userName: String,
+            userId: UUID,
             supabase: SupabaseClient
         ) {
             self.animeId = animeId
-            self.userName = userName
+            self.currentUserId = userId
             self.service = ChatBroadcastService(supabase: supabase)
         }
-
+    // 他人からの Broadcast を受信
     func onAppear() async {
-        try? await service.connect(animeId: animeId) { [weak self] msg in
+        try? await service.connect(animeId: animeId) { [weak self] bm in
             guard let self else { return }
 
-            Task { @MainActor in
-                self.messages.append(msg)
-            }
+            let message = ChatMessage(
+                id: bm.id,
+                animeId: bm.animeId,
+                content: bm.content,
+                createdAt: bm.createdAt,
+                userId: bm.userId,
+                profile: bm.profile.map {
+                    Profile(name: $0.name, avatarUrl: $0.avatarUrl)
+                }
+            )
+
+            if !self.messages.contains(where: { $0.id == message.id }) {
+                        self.messages.append(message)
+                    }
         }
     }
 
-
+    // 自分の送信
     func send() async {
         guard !text.isEmpty else { return }
 
-        let message = ChatMessage(
+        let now = Date()
+
+        // UI 用の正体
+        let chatMessage = ChatMessage(
             id: UUID(),
             animeId: animeId,
             content: text,
-            userName: userName,
-            createdAt: String()
+            createdAt: now,
+            userId: currentUserId, // 本当は session.user.id
+            profile: nil
         )
 
+        // 即 UI 反映
+        messages.append(chatMessage)
         text = ""
 
+        // Broadcast 用の軽量モデル
+        let broadcast = BroadcastMessage(
+            id: chatMessage.id,
+            animeId: chatMessage.animeId,
+            content: chatMessage.content,
+            createdAt: chatMessage.createdAt,
+            userId: chatMessage.userId,
+            profile: nil
+        )
+
         do {
-            try await service.send(message: message)
+            try await service.send(message: broadcast)
         } catch {
             print("send error:", error)
         }
     }
 
-
-
     func onDisappear() {
-        Task {
-            await service.disconnect()
-        }
+        Task { await service.disconnect() }
     }
-
 }

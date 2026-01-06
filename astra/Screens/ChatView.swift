@@ -6,34 +6,34 @@ struct ChatView: View {
     @StateObject private var vm: ChatViewModel
 
     init(
-        animeId: Int,
-        userName: String,
-        supabase: SupabaseClient
-    ) {
-        _vm = StateObject(
-            wrappedValue: ChatViewModel(
-                animeId: animeId,
-                userName: userName,
-                supabase: supabase
+            animeId: Int,
+            userId: UUID,
+            supabase: SupabaseClient
+        ) {
+            _vm = StateObject(
+                wrappedValue: ChatViewModel(
+                    animeId: animeId,
+                    userId: userId,
+                    supabase: supabase
+                )
             )
-        )
-    }
+        }
 
     var body: some View {
         VStack(spacing: 0) {
 
-            // ===== メッセージ一覧 =====
             ScrollViewReader { proxy in
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 12) {
-                        ForEach(vm.messages) { msg in
+
+                        ForEach(vm.messages, id: \.id) { msg in
                             ChatBubble(
                                 message: msg,
-                                isMe: msg.userName == vm.currentUserName
+                                isMe: msg.userId == vm.currentUserId
                             )
-
-                                .id(msg.id)
+                            .id(msg.id)
                         }
+
                     }
                     .padding()
                 }
@@ -48,20 +48,17 @@ struct ChatView: View {
 
             Divider()
 
-            // ===== 入力欄 =====
             HStack(spacing: 8) {
                 TextField("メッセージを入力", text: $vm.text)
                     .textFieldStyle(.roundedBorder)
 
                 Button {
-                    Task {
-                        await vm.send()
-                    }
+                    Task { await vm.send() }
                 } label: {
                     Image(systemName: "paperplane.fill")
                         .foregroundColor(.white)
                         .padding(8)
-                        .background(vm.text.isEmpty ? Color.gray : Color.blue)
+                        .background(vm.text.isEmpty ? .gray : .blue)
                         .clipShape(Circle())
                 }
                 .disabled(vm.text.isEmpty)
@@ -70,16 +67,10 @@ struct ChatView: View {
         }
         .navigationTitle("チャット")
         .navigationBarTitleDisplayMode(.inline)
-        .task {
-            await vm.onAppear()
-        }
-        .onDisappear {
-            vm.onDisappear()
-        }
+        .task { await vm.onAppear() }
+        .onDisappear { vm.onDisappear() }
     }
 }
-import SwiftUI
-
 struct ChatBubble: View {
 
     let message: ChatMessage
@@ -90,7 +81,7 @@ struct ChatBubble: View {
             if isMe { Spacer() }
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(message.userName)
+                Text(message.profile?.name ?? "Unknown")
                     .font(.caption)
                     .foregroundColor(.secondary)
 
