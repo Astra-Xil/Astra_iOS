@@ -12,6 +12,7 @@ final class ChatViewModel: ObservableObject {
 
     @Published var messages: [ChatMessage] = []
     @Published var text: String = ""
+    @Published var onlineCount: Int = 0
 
     private let service: ChatBroadcastService
     private let animeId: Int
@@ -29,24 +30,27 @@ final class ChatViewModel: ObservableObject {
         }
     // 他人からの Broadcast を受信
     func onAppear() async {
-        try? await service.connect(animeId: animeId) { [weak self] bm in
-            guard let self else { return }
-
-            let message = ChatMessage(
-                id: bm.id,
-                animeId: bm.animeId,
-                content: bm.content,
-                createdAt: bm.createdAt,
-                userId: bm.userId,
-                profile: bm.profile.map {
-                    Profile(name: $0.name, avatarUrl: $0.avatarUrl)
+        try? await service.connect(
+            animeId: animeId,
+            userId: currentUserId,
+            onMessage: { [weak self] bm in
+                guard let self else { return }
+                let message = ChatMessage(
+                    id: bm.id,
+                    animeId: bm.animeId,
+                    content: bm.content,
+                    createdAt: bm.createdAt,
+                    userId: bm.userId,
+                    profile: bm.profile.map { Profile(name: $0.name, avatarUrl: $0.avatarUrl) }
+                )
+                if !self.messages.contains(where: { $0.id == message.id }) {
+                    self.messages.append(message)
                 }
-            )
-
-            if !self.messages.contains(where: { $0.id == message.id }) {
-                        self.messages.append(message)
-                    }
-        }
+            },
+            onPresenceChange: { [weak self] count in
+                self?.onlineCount = count
+            }
+        )
     }
 
     // 自分の送信
@@ -96,6 +100,23 @@ final class ChatViewModel: ObservableObject {
 
         } catch {
             print("send error:", error)
+        }
+    }
+
+    func loadInitialMessages(accessToken: String) async {
+        do {
+            let initial = try await ChatServiceAPI.shared.fetchInitialMessages(
+                animeId: animeId,
+                accessToken: accessToken
+            )
+
+            // 並び保証（念のため）
+            self.messages = initial.sorted {
+                $0.createdAt < $1.createdAt
+            }
+
+        } catch {
+            print("fetch initial messages error:", error)
         }
     }
 
