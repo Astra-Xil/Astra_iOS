@@ -50,41 +50,55 @@ final class ChatViewModel: ObservableObject {
     }
 
     // 自分の送信
-    func send() async {
+    func send(accessToken: String) async {
         guard !text.isEmpty else { return }
-
-        let now = Date()
-
-        // UI 用の正体
-        let chatMessage = ChatMessage(
-            id: UUID(),
-            animeId: animeId,
-            content: text,
-            createdAt: now,
-            userId: currentUserId, // 本当は session.user.id
-            profile: nil
-        )
-
-        // 即 UI 反映
-        messages.append(chatMessage)
+        guard !accessToken.isEmpty else { return }
+        let content = text
         text = ""
 
-        // Broadcast 用の軽量モデル
-        let broadcast = BroadcastMessage(
-            id: chatMessage.id,
-            animeId: chatMessage.animeId,
-            content: chatMessage.content,
-            createdAt: chatMessage.createdAt,
-            userId: chatMessage.userId,
-            profile: nil
-        )
-
         do {
+            // ① POST → 正のデータを受け取る
+            let dto = try await ChatServiceAPI.shared.postMessage(
+                animeId: animeId,
+                message: content,
+                accessToken: accessToken
+            )
+
+            // ② DTO → UIモデル
+            let message = ChatMessage(
+                id: dto.id,
+                animeId: dto.animeId,
+                content: dto.content,
+                createdAt: dto.createdAt,
+                userId: dto.userId,
+                profile: dto.profiles
+            )
+
+            // ③ UI反映
+            messages.append(message)
+
+            // ④ Broadcast（コピーを配るだけ）
+            let broadcast = BroadcastMessage(
+                id: message.id,
+                animeId: message.animeId,
+                content: message.content,
+                createdAt: message.createdAt,
+                userId: message.userId,
+                profile: message.profile.map {
+                    BroadcastProfile(
+                        name: $0.name,
+                        avatarUrl: $0.avatarUrl
+                    )
+                }
+            )
+
             try await service.send(message: broadcast)
+
         } catch {
             print("send error:", error)
         }
     }
+
 
     func onDisappear() {
         Task { await service.disconnect() }

@@ -4,6 +4,7 @@ import Supabase
 struct ChatView: View {
 
     @StateObject private var vm: ChatViewModel
+    @EnvironmentObject var authStore: AuthStore
 
     init(
             animeId: Int,
@@ -53,7 +54,7 @@ struct ChatView: View {
                     .textFieldStyle(.roundedBorder)
 
                 Button {
-                    Task { await vm.send() }
+                    Task { await vm.send(accessToken: authStore.accessToken) }
                 } label: {
                     Image(systemName: "paperplane.fill")
                         .foregroundColor(.white)
@@ -67,7 +68,8 @@ struct ChatView: View {
         }
         .navigationTitle("チャット")
         .navigationBarTitleDisplayMode(.inline)
-        .task { await vm.onAppear() }
+        .task { await vm.loadInitialMessages(accessToken: authStore.accessToken)
+await vm.onAppear() }
         .onDisappear { vm.onDisappear() }
     }
 }

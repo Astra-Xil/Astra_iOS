@@ -6,6 +6,9 @@
 //
 
 import Foundation
+struct ChatListResponse: Decodable {
+    let data: [ChatMessageDTO]
+}
 
 
 struct ChatPostRequest: Encodable {
@@ -47,4 +50,29 @@ struct BroadcastMessage: Codable, Identifiable {
     let createdAt: Date
     let userId: UUID
     let profile: BroadcastProfile?
+}
+extension ChatMessage {
+    init(dto: ChatMessageDTO) {
+        self.id = dto.id
+        self.animeId = dto.animeId
+        self.content = dto.content
+        self.createdAt = dto.createdAt
+        self.userId = dto.userId
+        self.profile = dto.profiles
+    }
+}
+extension BroadcastMessage {
+    init(from message: ChatMessage) {
+        self.id = message.id
+        self.animeId = message.animeId
+        self.content = message.content
+        self.createdAt = message.createdAt
+        self.userId = message.userId
+        self.profile = message.profile.map {
+            BroadcastProfile(
+                name: $0.name,
+                avatarUrl: $0.avatarUrl
+            )
+        }
+    }
 }
