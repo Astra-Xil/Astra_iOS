@@ -11,23 +11,24 @@ import Foundation
 final class ChatPresenceViewModel: ObservableObject {
 
     @Published var onlineCount: Int = 0
+
     private let service: ChatPresenceService
-    private let animeId: Int
+    private let threadId: UUID
     private let userId: UUID
 
     init(
-        animeId: Int,
+        threadId: UUID,
         userId: UUID,
         supabase: SupabaseClient
     ) {
-        self.animeId = animeId
+        self.threadId = threadId
         self.userId = userId
         self.service = ChatPresenceService(supabase: supabase)
     }
 
     func start() async {
         try? await service.connect(
-            animeId: animeId,
+            threadId: threadId,
             userId: userId
         ) { [weak self] count in
             self?.onlineCount = count

@@ -13,9 +13,10 @@ final class ChatServiceAPI {
 
     func postMessage(
         animeId: Int,
+        threadId: UUID,
         message: String,
         accessToken: String
-    ) async throws -> ChatMessageDTO {
+    ) async throws -> ChatMessage {
 
         let url = URL(string: "\(AppConfig.apiBaseURL)/chat")!
         var request = URLRequest(url: url)
@@ -26,6 +27,7 @@ final class ChatServiceAPI {
 
         let body = ChatPostRequest(
             anime_id: animeId,
+            thread_id: threadId,
             content: message
         )
         request.httpBody = try JSONEncoder().encode(body)
@@ -38,8 +40,9 @@ final class ChatServiceAPI {
 
         if 200..<300 ~= res.statusCode {
             let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .iso8601   // ★超重要
-            return try decoder.decode(ChatMessageDTO.self, from: data)
+            decoder.dateDecodingStrategy = .iso8601
+            let dto = try decoder.decode(ChatMessageDTO.self, from: data)
+            return ChatMessage(dto: dto)
         }
 
         if let apiError = try? JSONDecoder().decode(APIErrorResponse.self, from: data) {
@@ -53,11 +56,12 @@ final class ChatServiceAPI {
         throw URLError(.badServerResponse)
     }
 
+
 }
 extension ChatServiceAPI {
 
-    func fetchInitialMessages(
-        animeId: Int,
+    func fetchMessages(
+        threadId: UUID,
         accessToken: String
     ) async throws -> [ChatMessage] {
 
@@ -65,7 +69,7 @@ extension ChatServiceAPI {
             string: "\(AppConfig.apiBaseURL)/chat"
         )!
         components.queryItems = [
-            URLQueryItem(name: "anime_id", value: String(animeId))
+            URLQueryItem(name: "thread_id", value: threadId.uuidString)
         ]
 
         var req = URLRequest(url: components.url!)
@@ -84,17 +88,7 @@ extension ChatServiceAPI {
 
         let result = try decoder.decode(ChatListResponse.self, from: data)
 
-        return result.data.map {
-            ChatMessage(
-                id: $0.id,
-                animeId: $0.animeId,
-                content: $0.content,
-                createdAt: $0.createdAt,
-                userId: $0.userId,
-                profile: $0.profiles
-            )
-        }
-
-
+        return result.data.map(ChatMessage.init)
     }
+
 }

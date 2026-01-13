@@ -14,27 +14,38 @@ final class ChatViewModel: ObservableObject {
     @Published var text: String = ""
 
     private let service: ChatBroadcastService
+    private let threadId: UUID
     private let animeId: Int
 
-    let currentUserId: UUID   // ← ここが基準
+    let currentUserId: UUID
 
     init(
-            animeId: Int,
-            userId: UUID,
-            supabase: SupabaseClient
-        ) {
-            self.animeId = animeId
-            self.currentUserId = userId
-            self.service = ChatBroadcastService(supabase: supabase)
-        }
-    // 他人からの Broadcast を受信
-    func onAppear() async {
-        try? await service.connect(animeId: animeId) { [weak self] bm in
+        animeId: Int,
+        threadId: UUID,
+        userId: UUID,
+        supabase: SupabaseClient
+    ) {
+        self.animeId = animeId
+        self.threadId = threadId
+        self.currentUserId = userId
+        self.service = ChatBroadcastService(supabase: supabase)
+    }
+
+    // 初期ロード + Realtime 接続
+    func onAppear(accessToken: String) async {
+
+        await loadInitialMessages(accessToken: accessToken)
+
+        try? await service.connect(threadId: threadId) { [weak self] bm in
             guard let self else { return }
+
+            // thread フィルタ（保険）
+            guard bm.threadId == self.threadId else { return }
 
             let message = ChatMessage(
                 id: bm.id,
                 animeId: bm.animeId,
+                threadId: bm.threadId,
                 content: bm.content,
                 createdAt: bm.createdAt,
                 userId: bm.userId,
@@ -44,76 +55,50 @@ final class ChatViewModel: ObservableObject {
             )
 
             if !self.messages.contains(where: { $0.id == message.id }) {
-                        self.messages.append(message)
-                    }
+                self.messages.append(message)
+            }
         }
     }
 
     // 自分の送信
     func send(accessToken: String) async {
-            guard !text.isEmpty else { return }
-            guard !accessToken.isEmpty else { return }
-            let content = text
-            text = ""
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        text = ""
 
-            do {
-                // ① POST → 正のデータを受け取る
-                let dto = try await ChatServiceAPI.shared.postMessage(
-                    animeId: animeId,
-                    message: content,
-                    accessToken: accessToken
-                )
+        do {
+            let message = try await ChatServiceAPI.shared.postMessage(
+                animeId: animeId,
+                threadId: threadId,
+                message: trimmed,
+                accessToken: accessToken
+            )
 
-                // ② DTO → UIモデル
-                let message = ChatMessage(
-                    id: dto.id,
-                    animeId: dto.animeId,
-                    content: dto.content,
-                    createdAt: dto.createdAt,
-                    userId: dto.userId,
-                    profile: dto.profiles
-                )
+            messages.append(message)
 
-                // ③ UI反映
-                messages.append(message)
+            let broadcast = BroadcastMessage(from: message)
+            try await service.send(message: broadcast)
 
-                // ④ Broadcast（コピーを配るだけ）
-                let broadcast = BroadcastMessage(
-                    id: message.id,
-                    animeId: message.animeId,
-                    content: message.content,
-                    createdAt: message.createdAt,
-                    userId: message.userId,
-                    profile: message.profile.map {
-                        BroadcastProfile(
-                            name: $0.name,
-                            avatarUrl: $0.avatarUrl
-                        )
-                    }
-                )
-
-                try await service.send(message: broadcast)
-
-            } catch {
-                print("send error:", error)
-            }
+        } catch {
+            print("send error:", error)
         }
+    }
+
     func loadInitialMessages(accessToken: String) async {
-           do {
-               let initial = try await ChatServiceAPI.shared.fetchInitialMessages(
-                   animeId: animeId,
-                   accessToken: accessToken
-               )
+        do {
+            let initial = try await ChatServiceAPI.shared.fetchMessages(
+                threadId: threadId,
+                accessToken: accessToken
+            )
 
-               // 並び保証（念のため）
-               self.messages = initial.sorted {
-                   $0.createdAt < $1.createdAt
-               }
+            self.messages = initial.sorted {
+                $0.createdAt < $1.createdAt
+            }
 
-           } catch {
-               print("fetch initial messages error:", error)
-           }
-       }
+        } catch {
+            print("fetch initial messages error:", error)
+        }
+    }
 
     func onDisappear() {
         Task { await service.disconnect() }

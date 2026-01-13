@@ -19,16 +19,17 @@ final class ChatPresenceService {
     self.supabase = supabase
   }
 
-  func connect(
-    animeId: Int,
-    userId: UUID,
-    onChange: @escaping @MainActor (Int) -> Void
-  ) async throws {
+    func connect(
+      threadId: UUID,
+      userId: UUID,
+      onChange: @escaping @MainActor (Int) -> Void
+    ) async throws {
+
 
     // 二重接続防止（超重要）
     await disconnect()
 
-    let channel = supabase.realtimeV2.channel("chat:\(animeId):presence") {
+    let channel = supabase.realtimeV2.channel("chat:\(threadId.uuidString):presence") {
       $0.presence.key = userId.uuidString
     }
     self.channel = channel

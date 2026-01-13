@@ -1,9 +1,5 @@
 import SwiftUI
 
-import SwiftUI
-
-import SwiftUI
-
 struct AnimeSearchView: View {
 
     @StateObject private var vm =

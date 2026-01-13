@@ -13,18 +13,19 @@ final class ChatBroadcastService {
 
     // MARK: - 接続
     func connect(
-        animeId: Int,
+        threadId: UUID,
         onMessage: @escaping @MainActor (BroadcastMessage) -> Void
     ) async throws {
 
-        let channel = supabase.realtimeV2.channel("chat:\(animeId)") {
+        let channel = supabase.realtimeV2.channel("chat:\(threadId.uuidString)") {
             $0.broadcast.receiveOwnBroadcasts = true
         }
+
         self.channel = channel
 
         // ① subscribe
         try await channel.subscribeWithError()
-        print("🟢 subscribed chat:\(animeId)")
+        print("🟢 subscribed chat:\(threadId.uuidString)")
 
         // ② stream
         let stream = channel.broadcastStream(event: "message")

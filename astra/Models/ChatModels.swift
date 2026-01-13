@@ -20,6 +20,7 @@ struct ChatPostRequest: Encodable {
 struct ChatMessage: Identifiable {
     let id: UUID
     let animeId: Int
+    let threadId: UUID
     let content: String
     let createdAt: Date
     let userId: UUID
@@ -31,6 +32,7 @@ struct ChatMessage: Identifiable {
 struct ChatMessageDTO: Decodable {
     let id: UUID
     let animeId: Int
+    let threadId: UUID
     let content: String
     let createdAt: Date
     let userId: UUID
@@ -39,34 +41,41 @@ struct ChatMessageDTO: Decodable {
     enum CodingKeys: String, CodingKey {
         case id
         case animeId   = "anime_id"
+        case threadId  = "thread_id"
         case content
         case createdAt = "created_at"
         case userId    = "user_id"
         case profiles
     }
 }
+
 struct BroadcastMessage: Codable, Identifiable {
     let id: UUID
     let animeId: Int
+    let threadId: UUID
     let content: String
     let createdAt: Date
     let userId: UUID
     let profile: BroadcastProfile?
 }
+
 extension ChatMessage {
     init(dto: ChatMessageDTO) {
         self.id = dto.id
         self.animeId = dto.animeId
+        self.threadId = dto.threadId
         self.content = dto.content
         self.createdAt = dto.createdAt
         self.userId = dto.userId
         self.profile = dto.profiles
     }
 }
+
 extension BroadcastMessage {
     init(from message: ChatMessage) {
         self.id = message.id
         self.animeId = message.animeId
+        self.threadId = message.threadId
         self.content = message.content
         self.createdAt = message.createdAt
         self.userId = message.userId

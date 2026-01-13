@@ -3,19 +3,24 @@ import Supabase
 
 struct ChatView: View {
 
+    let thread: ThreadItem
+
     @StateObject private var messagesVM: ChatViewModel
     @StateObject private var presenceVM: ChatPresenceViewModel
 
     @EnvironmentObject var authStore: AuthStore
 
     init(
-        animeId: Int,
+        thread: ThreadItem,
         userId: UUID,
         supabase: SupabaseClient
     ) {
+        self.thread = thread
+
         _messagesVM = StateObject(
             wrappedValue: ChatViewModel(
-                animeId: animeId,
+                animeId: thread.animeId,
+                threadId: thread.id,
                 userId: userId,
                 supabase: supabase
             )
@@ -23,7 +28,7 @@ struct ChatView: View {
 
         _presenceVM = StateObject(
             wrappedValue: ChatPresenceViewModel(
-                animeId: animeId,
+                threadId: thread.id,
                 userId: userId,
                 supabase: supabase
             )
@@ -54,7 +59,7 @@ struct ChatView: View {
             ScrollViewReader { proxy in
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 12) {
-                        ForEach(messagesVM.messages, id: \.id) { msg in
+                        ForEach(messagesVM.messages) { msg in
                             ChatBubble(
                                 message: msg,
                                 isMe: msg.userId == messagesVM.currentUserId
@@ -97,13 +102,10 @@ struct ChatView: View {
             }
             .padding()
         }
-        .navigationTitle("チャット")
+        .navigationTitle(thread.title)
         .navigationBarTitleDisplayMode(.inline)
         .task {
-            await messagesVM.loadInitialMessages(
-                accessToken: authStore.accessToken
-            )
-            await messagesVM.onAppear()
+            await messagesVM.onAppear(accessToken: authStore.accessToken)
             await presenceVM.start()
         }
         .onDisappear {
@@ -114,6 +116,7 @@ struct ChatView: View {
         }
     }
 }
+
 
 struct ChatBubble: View {
 
