@@ -13,8 +13,10 @@ struct ChatListResponse: Decodable {
 
 struct ChatPostRequest: Encodable {
     let anime_id: Int
+    let thread_id: UUID
     let content: String
 }
+
 struct ChatMessage: Identifiable {
     let id: UUID
     let animeId: Int
