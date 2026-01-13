@@ -1,4 +1,5 @@
 import SwiftUI
+import Supabase
 
 struct AnimeSearchView: View {
 
@@ -51,10 +52,7 @@ struct AnimeSearchView: View {
             } else {
                 List(items) { item in
                     NavigationLink {
-                        AnimeDetailScreenView(
-                            animeId: item.id,
-                            title: item.title
-                        )
+                        ThreadListView(animeId: item.id)
                     } label: {
                         AnimeRowView(item: item)
                     }

@@ -10,22 +10,17 @@ import SwiftUI
 
 struct ThreadListView: View {
 
+    let animeId: Int
+
+    @EnvironmentObject var authStore: AuthStore
+    @Environment(\.supabase) private var supabase
+
     @StateObject private var vm: ThreadViewModel
     @State private var showCreate = false
 
-    let accessToken: String
-    let userId: UUID
-
-    @Environment(\.supabase) private var supabase
-
-    init(
-        animeId: Int,
-        accessToken: String,
-        userId: UUID
-    ) {
+    init(animeId: Int) {
+        self.animeId = animeId
         _vm = StateObject(wrappedValue: ThreadViewModel(animeId: animeId))
-        self.accessToken = accessToken
-        self.userId = userId
     }
 
     var body: some View {
@@ -34,7 +29,7 @@ struct ThreadListView: View {
                 NavigationLink {
                     ChatView(
                         thread: thread,
-                        userId: userId,
+                        userId: authStore.userId!,
                         supabase: supabase
                     )
                 } label: {
@@ -75,10 +70,11 @@ struct ThreadListView: View {
             await vm.load()
         }
         .sheet(isPresented: $showCreate) {
-            ThreadCreateView(vm: vm, accessToken: accessToken)
+            ThreadCreateView(vm: vm, accessToken: authStore.accessToken)
         }
     }
 }
+
 
 
 struct ThreadCreateView: View {

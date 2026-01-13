@@ -18,6 +18,9 @@ final class AuthStore: ObservableObject {
     var accessToken: String {
         session?.accessToken ?? ""
     }
+    var userId: UUID? {
+        session?.user.id
+    }
 
     func loadSession() async {
         do {

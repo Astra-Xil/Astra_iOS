@@ -24,7 +24,7 @@ struct AnimeDetailScreenView: View {
                         Spacer()
                         if #available(iOS 26.0, *) {
                             NavigationLink {
-                                ChatView(animeId: animeId, userId: UUID(), supabase: supabase)
+//                                ChatView(animeId: animeId, userId: UUID(), supabase: supabase)
                             } label: {
                                 Image(systemName: "bubble.left")
                                     .font(.system(size: 20, weight: .bold))

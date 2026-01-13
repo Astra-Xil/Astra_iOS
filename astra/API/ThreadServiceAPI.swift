@@ -36,7 +36,7 @@ final class ThreadServiceAPI {
         req.httpBody = try JSONEncoder().encode(body)
 
         let (data, _) = try await URLSession.shared.data(for: req)
-
+        print("THREAD RAW:", String(data: data, encoding: .utf8) ?? "nil")
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         let dto = try decoder.decode(ThreadDTO.self, from: data)
