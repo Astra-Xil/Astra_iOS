@@ -1,5 +1,5 @@
 {
-  "originHash" : "72d519720fa823c69cda8607ac64b049783d4109aa093971f7f8e387cee328ba",
+  "originHash" : "1d9193f558b6681ed42e75719c9ae51930456ab2c4d8857767f90fcba97fd34c",
   "pins" : [
     {
       "identity" : "simpletoast",
@@ -62,6 +62,15 @@
       "state" : {
         "revision" : "45eb0224913ea070ec4fba17291b9e7ecf4749ca",
         "version" : "1.5.1"
+      }
+    },
+    {
+      "identity" : "tocropviewcontroller",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/TimOliver/TOCropViewController.git",
+      "state" : {
+        "revision" : "b73eb2d665a5ba8ea10cdf2682a0f7f0bbb550bb",
+        "version" : "3.1.1"
       }
     },
     {

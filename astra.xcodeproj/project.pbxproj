@@ -12,6 +12,7 @@
 		3A51176B2EF89109005DD723 /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3A5117662EF89109005DD723 /* Debug.xcconfig */; };
 		3A5117712EF89299005DD723 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 3A5117702EF89299005DD723 /* Supabase */; };
 		3A64819E2EFD16F5007ED201 /* SimpleToast in Frameworks */ = {isa = PBXBuildFile; productRef = 3A64819D2EFD16F5007ED201 /* SimpleToast */; };
+		3A851CFE2F16C330003ADD56 /* TOCropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = 3A851CFD2F16C330003ADD56 /* TOCropViewController */; };
 		3A9A596A2F0CC323000BB3B5 /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = 3A9A59692F0CC323000BB3B5 /* Realtime */; };
 /* End PBXBuildFile section */
 
@@ -79,6 +80,7 @@
 			files = (
 				3A9A596A2F0CC323000BB3B5 /* Realtime in Frameworks */,
 				3A64819E2EFD16F5007ED201 /* SimpleToast in Frameworks */,
+				3A851CFE2F16C330003ADD56 /* TOCropViewController in Frameworks */,
 				3A5117712EF89299005DD723 /* Supabase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -163,6 +165,7 @@
 				3A5117702EF89299005DD723 /* Supabase */,
 				3A64819D2EFD16F5007ED201 /* SimpleToast */,
 				3A9A59692F0CC323000BB3B5 /* Realtime */,
+				3A851CFD2F16C330003ADD56 /* TOCropViewController */,
 			);
 			productName = astra;
 			productReference = 3A5117112EF890CB005DD723 /* astra.app */;
@@ -249,6 +252,7 @@
 			packageReferences = (
 				3A51176E2EF8924A005DD723 /* XCRemoteSwiftPackageReference "supabase-swift" */,
 				3A64819C2EFD16E1007ED201 /* XCRemoteSwiftPackageReference "SimpleToast" */,
+				3A851CFC2F16C330003ADD56 /* XCRemoteSwiftPackageReference "TOCropViewController" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3A5117122EF890CB005DD723 /* Products */;
@@ -666,6 +670,14 @@
 				minimumVersion = 0.12.0;
 			};
 		};
+		3A851CFC2F16C330003ADD56 /* XCRemoteSwiftPackageReference "TOCropViewController" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/TimOliver/TOCropViewController.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -678,6 +690,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3A64819C2EFD16E1007ED201 /* XCRemoteSwiftPackageReference "SimpleToast" */;
 			productName = SimpleToast;
+		};
+		3A851CFD2F16C330003ADD56 /* TOCropViewController */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3A851CFC2F16C330003ADD56 /* XCRemoteSwiftPackageReference "TOCropViewController" */;
+			productName = TOCropViewController;
 		};
 		3A9A59692F0CC323000BB3B5 /* Realtime */ = {
 			isa = XCSwiftPackageProductDependency;
